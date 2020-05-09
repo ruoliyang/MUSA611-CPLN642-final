@@ -1,0 +1,130 @@
+<html>
+<head>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+ integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+ crossorigin=""/>
+</head>
+
+  <div id="sidebar" style="position: absolute; top:0; left: 0; width: 23%; height: 100%; padding: 20px; background-color: #C3D285">
+    <h1 id="title">Final Project: Parks and Public Recreation Assets in Philadelphia<br>by Ruoli Yang</h1>
+      <p id="description">This final project serves as a tool for people seeking for a suitable open space in Philadelphia. Utilizing the park and public recreation assets data in Philadelphia, this tool provides residents and visitors places in their proximity and interests to relax.
+      <br>
+      <br>
+      The map shows all parks and public recreation assets available in Philadelphia. To find out where to go in closest proximity, please select your status: residents or visitors.</p>
+        <div class="dropdown">
+          <button onclick="myFunction()" class="dropbtn">Select Your Identity</button>
+          <div id="myDropdown" class="dropdown-content">
+            <a href="index_resident.html">Residents</a>
+            <a href="index_visitor.html">Visitors</a>
+          </div>
+      </div>
+  </div>
+  <div id="map" style="position: absolute; top:0; right: 0; height: 100%">
+  </div>
+
+  <script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"
+    integrity="sha256-G7A4JrJjJlFqP0yamznwPjAApIKPkadeHfyIwiaa9e0="
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+    crossorigin=""></script>
+  <script src="main.js"></script>
+
+  <script>
+      var slides = [
+        { title: "1. All Park and Public Recreation Assets in Philadelphia",
+        description: "This map with the polygones shows all parks and public recreation assets in Philadelphia.",
+        color: "#DEDEE3",
+        filter: myFilter },
+        { title: "2. Large PPR Assets",
+        description: "This map reveals PPR assets that are larger than 50 acres in Philadelphia, categorized as large PPR assets by myself.",
+        color: "#86B9CE",
+        filter: myFilter2 },
+        { title: "3. Small PPR Assets",
+        description: "This map displays PPR assets that are smaller than 3 acres, therefore categorized as small PPR assets by me.",
+        color: "#7772E2",
+        filter: myFilter3 },
+        { title: "4. PPR Assets for Community Use",
+        description: "This map filters PPR assets that are categorized as Community Park (bright orange), Neighborhood Park (dark orange), Mini Park (bright green), and Recreation Site (dark wine).",
+        color: "#4274FD",
+        filter: myFilter4,
+        style: myStyle},
+        { title: "5. Urban PPR Assets",
+        description: "Zooming in, this map shows PPR assets located within center city through filtering Zipcodes, which are zipcodes 19102 (dark blue), 19103 (bright pink), 19106 (bright blue), and 19107 (bright green).",
+        color: "#FDD149",
+        filter: myFilter5,
+        style: myStyle2}
+      ];
+
+      var currentSlide = -1
+
+      var loadSlide = function(slide) {
+        removeMarkers()
+        $(document).ready(function() {
+          $.ajax(dataset).done(function(data) {
+            var parsedData = JSON.parse(data);
+            featureGroup = L.geoJson(parsedData, {
+              onEachFeature: function (feature, layer) {
+                layer.myTag = "featureGroup"},
+              style: slide.style,
+              filter: slide.filter,
+            }).addTo(map);
+            // quite similar to _.each
+            featureGroup.eachLayer(eachFeatureFunction);
+          });
+        });
+        //$('#title').text(slide.title)
+        //$('#description').text(slide.description)
+        //$('#sidebar').css("background-color", slide.color)
+      }
+
+      loadSlide(slides[0]);
+
+      var next = function() {
+        if (currentSlide == slides.length - 1) {
+        } else {
+          $('#nextButton').show()
+          currentSlide = currentSlide + 1
+          loadSlide(slides[currentSlide])
+        }
+        if (currentSlide == slides.length - 1) {
+          $('#nextButton').hide()
+        }};
+      $('#nextButton').click(function(e) {
+        if (currentSlide !== -1) {
+          $('#backButton').show()
+        } else {};
+        next()
+      });
+
+      var back = function() {
+        if (currentSlide == slides.length + 1) {
+        } else {
+          $('#backButton').show()
+          currentSlide = currentSlide - 1
+          loadSlide(slides[currentSlide])
+        }
+        if (currentSlide == 0) {
+          $('#backButton').hide()
+        }
+      };
+      $('#backButton').click(function(e) {
+        if (currentSlide !== slides.length) {
+          $('#nextButton').show()
+        } else {};
+        back()
+      });
+
+
+
+
+    </script>
+  </body>
+</html>

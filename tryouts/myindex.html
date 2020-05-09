@@ -1,0 +1,57 @@
+<html>
+ <head>
+   <link rel="stylesheet" href="css/style.css">
+   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+  integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+  crossorigin=""/>
+ </head>
+ <body>
+   <div id="sidebar">
+     <label id="title1">title1</label>
+     <br>
+       <p id="description">This map show PPR assets in Philadelphia.</p>
+     <br>
+       <button id="next">next</button>
+   </div>
+   <div id="map" class="map">
+   </div>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js" integrity="sha256-G7A4JrJjJlFqP0yamznwPjAApIKPkadeHfyIwiaa9e0=" crossorigin="anonymous"></script>
+   <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+ integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+ crossorigin=""></script>
+ <script src="main.js"></script>
+ <script>
+    var slides = [
+      { title: "title1", description: "the first description", color: "#DEDEE3" },
+      { title: "title2", description: "the second description", color: "#86B9CE" },
+      { title: "title3", description: "the third description", color: "#7772E2" },
+      { title: "title4", description: "the fourth description", color: "#4274FD" },
+      { title: "title5", description: "the fifth description", color: "#FDD149" },
+    ];
+    var currentSlide = 0;
+
+    var loadSlide = function(slide){
+      $('#title').text(slide.text);
+      $('#description').text(slide.description);
+      $('#sidebar').css("background-color",slide.color)
+    };
+
+    var next = function(){
+      if (currentSlide == slides.length - 1){
+      } else {
+        $('#nextbutton').show();
+        currentSlide = currentSlide + 1;
+        loadSlide(slides[currentSlide]);
+        }
+      if (currentSlide == slides.length - 1){
+        $('#nextbutton').hide()
+      }
+    };
+
+    $('#nextbutton').click(function(e){
+      next()
+    });
+ </script>
+
+</html>
