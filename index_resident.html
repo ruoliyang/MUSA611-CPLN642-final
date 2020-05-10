@@ -14,9 +14,13 @@
       The categories include recreation sites, neighborhood parks, community parks, and mini parks.
       <br>
       <br>
-      Please enter your zipcode below and the map will direct you to the parks within your zipcode.</p>
+      Please enter your zipcode below and the map will direct you to the parks within your zipcode.
+      <br>
+      <br>
+      Click on the colored sites to find out the name and address!
+      </p>
   </div>
-  <div style="position: absolute; left: 20px; width: 23%; bottom: 40%;">
+  <div style="position: absolute; left: 20px; width: 23%; bottom: 30%;">
     <br>
     Zipcode: <input id="string" type="text">
     <button id="gobutton">Go</button>
@@ -30,6 +34,7 @@
     crossorigin="anonymous"></script>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"
     integrity="sha256-G7A4JrJjJlFqP0yamznwPjAApIKPkadeHfyIwiaa9e0="
     crossorigin="anonymous"></script>
@@ -38,10 +43,18 @@
     crossorigin=""></script>
 
   <script src='https://unpkg.com/@turf/turf/turf.min.js'></script>
-  
+
   <script src="main.js"></script>
 
   <script>
+  var parsedZIP;
+  var destination;
+  var zipcode;
+
+  zipcode = '19104';
+  var dest_lat;
+  var dest_lng;
+
   var slides = [
     {filter: myFilter4,
       style: myStyle}
@@ -97,8 +110,25 @@
 
       loadSlide();
 
-      $("#gobutton").click(function(e) {
-        map.flyTo(zipcode, 14);
-      });
+//input Zipcode
+// destinate = user input zipcode
+
+
+        $('#gobutton').click(function(e) {
+          zipcode = $('#string').val();
+          console.log("stringField", zipcode);
+          $(document).ready(function() {
+            $.ajax(dataset2).done(function(data) {
+              parsedZIP = JSON.parse(data);
+              destination = _.filter(parsedZIP.features, function(each) {return each.properties['CODE'] == zipcode})
+              console.log(destination[0].geometry.coordinates);
+              var polygon = turf.polygon(destination[0].geometry.coordinates);
+              var centroid = turf.centroid(polygon);
+              console.log(centroid.geometry.coordinates[0], centroid.geometry.coordinates[1])
+              map.flyTo([centroid.geometry.coordinates[1], centroid.geometry.coordinates[0]], 14)
+            })});
+        });
+
+
 
   </script>
