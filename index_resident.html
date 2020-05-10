@@ -39,25 +39,28 @@
   <script src="main.js"></script>
 
   <script>
-      var slides = [
-        {filter: myFilter4,
-        style: myStyle}
+  var slides = [
+    {filter: myFilter4,
+      style: myStyle}
       ];
 
-      var currentSlide = -1
+      pageStyle=myStyle;
+      pageFilter=myFilter4;
 
-      var loadSlide = function(slide) {
+
+      var loadSlide = function() {
         removeMarkers()
         $(document).ready(function() {
           $.ajax(dataset).done(function(data) {
             var parsedData = JSON.parse(data);
             featureGroup = L.geoJson(parsedData, {
               onEachFeature: function (feature, layer) {
-                layer.myTag = "featureGroup"},
-            // pointToLayer: function (feature, latlng) {
-              // return L.marker(latlng, {icon: smallIcon});
+                layer.myTag = "featureGroup";
+                layer.bindPopup('Name: '+feature.properties.ASSET_NAME+'<br>'+'Address: '+feature.properties.ADDRESS)},
+              pointToLayer: function (feature, latlng) {
+                return L.marker(latlng, {icon: smallIcon});
             //  return L.circleMarker(latlng, geojsonMarkerOptions);
-            // },
+              },
               //onEachFeature: function (feature, layer) {
                 //layer.bindPopup('Name'+feature.properties.ASSET_NAME+'Address'+feature.properties.ADDRESS);
               //},
@@ -72,7 +75,6 @@
         //$('#description').text(slide.description)
         //$('#sidebar').css("background-color", slide.color)
       }
-
 
       loadSlide();
 
@@ -94,3 +96,5 @@
         next()
       });
 */
+
+  </script>

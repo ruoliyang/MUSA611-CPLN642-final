@@ -15,6 +15,7 @@ var Stamen_TonerLite = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{
 
 var dataset = "https://raw.githubusercontent.com/ruoliyang/MUSA611-CPLN642-midterm/master/PPR_Assets.geojson";
 var featureGroup;
+//var slides;
 
 //front page
 var myFilter = function(feature) {
@@ -61,7 +62,8 @@ var myFilter4 = function(feature) {
          feature.properties.PPR_USE == 'POOL' ||
          feature.properties.PPR_USE == 'ICE_RINK' ||
          feature.properties.PPR_USE == 'GOLF' ||
-         feature.properties.PPR_USE == 'ATHLETIC');
+         feature.properties.PPR_USE == 'ATHLETIC'||
+         feature.properties.PPR_USE == 'GARDEN');
 };
 
 var myStyle = function(feature) {
@@ -74,6 +76,7 @@ var myStyle = function(feature) {
     case 'ICE_RINK': return {color: '#C7CEEA'};
     case 'GOLF': return {color: '#C2C2B4'};
     case 'ATHLETIC': return {color: '#98B1B6'};
+    case 'GARDEN': return {color: '#973999'};
 //      break;
 //      default:
 //  return {};
@@ -160,6 +163,8 @@ var eachFeatureFunction = function(layer) {
   });
 };
 
+
+/*
 //load
 $(document).ready(function(slide) {
   $.ajax(dataset).done(function(data) {
@@ -175,6 +180,7 @@ $(document).ready(function(slide) {
     featureGroup.eachLayer(eachFeatureFunction);
   });
 });
+*/
 
 //remove layer
 var removeMarkers = function() {
@@ -187,6 +193,37 @@ var removeMarkers = function() {
 
 removeMarkers();
 //    <link rel="stylesheet" href="style.css">
+
+var pageStyle;
+var pageFilter;
+
+var loadSlide = function() {
+  removeMarkers();
+  $(document).ready(function() {
+    $.ajax(dataset).done(function(data) {
+      parsedData = JSON.parse(data);
+      featureGroup = L.geoJson(parsedData, {
+        onEachFeature: function (feature, layer) {
+          layer.myTag = "featureGroup";
+          layer.bindPopup('Name'+feature.properties.ASSET_NAME+'Address'+feature.properties.ADDRESS)},
+      // pointToLayer: function (feature, latlng) {
+        // return L.marker(latlng, {icon: smallIcon});
+      //  return L.circleMarker(latlng, geojsonMarkerOptions);
+      // },
+        //onEachFeature: function (feature, layer) {
+          //layer.bindPopup('Name'+feature.properties.ASSET_NAME+'Address'+feature.properties.ADDRESS);
+        //},
+        style: pageStyle,
+        filter: pageFilter,
+      }).addTo(map);
+      // quite similar to _.each
+      featureGroup.eachLayer(eachFeatureFunction);
+    });
+  });
+  //$('#title').text(slide.title)
+  //$('#description').text(slide.description)
+  //$('#sidebar').css("background-color", slide.color)
+};
 
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
