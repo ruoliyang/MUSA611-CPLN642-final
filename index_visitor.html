@@ -34,28 +34,8 @@
 
   <script>
       var slides = [
-        { title: "1. All Park and Public Recreation Assets in Philadelphia",
-        description: "This map with the polygones shows all parks and public recreation assets in Philadelphia.",
-        color: "#DEDEE3",
-        filter: myFilter },
-        { title: "2. Large PPR Assets",
-        description: "This map reveals PPR assets that are larger than 50 acres in Philadelphia, categorized as large PPR assets by myself.",
-        color: "#86B9CE",
-        filter: myFilter2 },
-        { title: "3. Small PPR Assets",
-        description: "This map displays PPR assets that are smaller than 3 acres, therefore categorized as small PPR assets by me.",
-        color: "#7772E2",
-        filter: myFilter3 },
-        { title: "4. PPR Assets for Community Use",
-        description: "This map filters PPR assets that are categorized as Community Park (bright orange), Neighborhood Park (dark orange), Mini Park (bright green), and Recreation Site (dark wine).",
-        color: "#4274FD",
-        filter: myFilter4,
-        style: myStyle},
-        { title: "5. Urban PPR Assets",
-        description: "Zooming in, this map shows PPR assets located within center city through filtering Zipcodes, which are zipcodes 19102 (dark blue), 19103 (bright pink), 19106 (bright blue), and 19107 (bright green).",
-        color: "#FDD149",
-        filter: myFilter5,
-        style: myStyle2}
+        { filter: myFilter6,
+        style: myStyle3}
       ];
 
       var currentSlide = -1
@@ -133,14 +113,14 @@
       });
 
       var geolocate = function(location) {
-        var geolocateString = `https://api.mapbox.com/geocoding/v5/mapbox.places/${location}.json?access_token=pk.eyJ1IjoicnVvbGxlIiwiYSI6ImNrOHVsaWpmODBjOXAzdWpzbDVucHZzMWMifQ.bAvoHwOnkMt0bp4QzSJ-aA&geometries=geojson`
+        var geolocateString = `https://api.mapbox.com/geocoding/v5/mapbox.places/${location}.json?access_token=pk.eyJ1IjoibnppbW1lcm1hbiIsImEiOiJjanR1NTBjeWMwZTBlM3lsbXU2d3BtYThzIn0.R0mxkEoHLh-xKk7oG0Tqxg&geometries=geojson`
         console.log("geolocate", geolocateString);
         var req = $.ajax(geolocateString);
         return req;
       };
 
       var getDirections = function(origin, destination) {
-        var directionsString = `https://api.mapbox.com/directions/v5/mapbox/cycling/${origin[0]},${origin[1]};${destination[0]},${destination[1]}?access_token=pk.eyJ1IjoicnVvbGxlIiwiYSI6ImNrOHVsaWpmODBjOXAzdWpzbDVucHZzMWMifQ.bAvoHwOnkMt0bp4QzSJ-aA&geometries=geojson`
+        var directionsString = `https://api.mapbox.com/directions/v5/mapbox/cycling/${origin[0]},${origin[1]};${destination[0]},${destination[1]}?access_token=pk.eyJ1IjoibnppbW1lcm1hbiIsImEiOiJjanR1NTBjeWMwZTBlM3lsbXU2d3BtYThzIn0.R0mxkEoHLh-xKk7oG0Tqxg&geometries=geojson`
         console.log("directionString", directionsString);
         var req = $.ajax(directionsString);
         return req;

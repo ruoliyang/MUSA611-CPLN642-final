@@ -40,14 +40,8 @@
 
   <script>
       var slides = [
-        { filter: myFilter4,
-        style: myStyle,
-        },
-        { title: "5. Urban PPR Assets",
-        description: "Zooming in, this map shows PPR assets located within center city through filtering Zipcodes, which are zipcodes 19102 (dark blue), 19103 (bright pink), 19106 (bright blue), and 19107 (bright green).",
-        color: "#FDD149",
-        filter: myFilter5,
-        style: myStyle2}
+        {filter: myFilter4,
+        style: myStyle}
       ];
 
       var currentSlide = -1
@@ -60,6 +54,13 @@
             featureGroup = L.geoJson(parsedData, {
               onEachFeature: function (feature, layer) {
                 layer.myTag = "featureGroup"},
+            // pointToLayer: function (feature, latlng) {
+              // return L.marker(latlng, {icon: smallIcon});
+            //  return L.circleMarker(latlng, geojsonMarkerOptions);
+            // },
+              //onEachFeature: function (feature, layer) {
+                //layer.bindPopup('Name'+feature.properties.ASSET_NAME+'Address'+feature.properties.ADDRESS);
+              //},
               style: myStyle,
               filter: myFilter4,
             }).addTo(map);
@@ -72,8 +73,10 @@
         //$('#sidebar').css("background-color", slide.color)
       }
 
-      console.log(loadSlide());
 
+      loadSlide();
+
+/*
       var go = function() {
         if (currentSlide == slides.length - 1) {
         } else {
@@ -90,3 +93,4 @@
         } else {};
         next()
       });
+*/

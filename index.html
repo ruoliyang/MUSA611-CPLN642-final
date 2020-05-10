@@ -55,21 +55,18 @@
         description: "This map filters PPR assets that are categorized as Community Park (bright orange), Neighborhood Park (dark orange), Mini Park (bright green), and Recreation Site (dark wine).",
         color: "#4274FD",
         filter: myFilter4,
-        style: myStyle},
-        { title: "5. Urban PPR Assets",
-        description: "Zooming in, this map shows PPR assets located within center city through filtering Zipcodes, which are zipcodes 19102 (dark blue), 19103 (bright pink), 19106 (bright blue), and 19107 (bright green).",
-        color: "#FDD149",
-        filter: myFilter5,
-        style: myStyle2}
+        style: myStyle}
       ];
 
       var currentSlide = -1
+
+      var parsedData;
 
       var loadSlide = function(slide) {
         removeMarkers()
         $(document).ready(function() {
           $.ajax(dataset).done(function(data) {
-            var parsedData = JSON.parse(data);
+            parsedData = JSON.parse(data);
             featureGroup = L.geoJson(parsedData, {
               onEachFeature: function (feature, layer) {
                 layer.myTag = "featureGroup"},

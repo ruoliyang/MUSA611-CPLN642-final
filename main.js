@@ -81,9 +81,11 @@ var myStyle = function(feature) {
 };
 
 //marker popup
+var parsedData;
+
 featureGroup = L.geoJson(parsedData, {
       style: myStyle,
-      //filter: myFilter
+      filter: myFilter4,
       pointToLayer: function (feature, latlng) {
          return L.marker(latlng, {icon: smallIcon});
       //  return L.circleMarker(latlng, geojsonMarkerOptions);
@@ -93,7 +95,7 @@ featureGroup = L.geoJson(parsedData, {
 }
     }).addTo(map);
 
-
+/*
 //slide 5 ZOOM!
 var myFilter5 = function(feature) {
   map.flyTo([39.95, -75.16], 14);
@@ -110,6 +112,7 @@ var myStyle2 = function(feature) {
     case 19106: return {color: '#0080FF'};
     case 19107: return {color: '#00FF00'};
   }};
+*/
 
 //Visitors Page
   var myFilter6 = function(feature) {
@@ -122,7 +125,7 @@ var myStyle2 = function(feature) {
            feature.properties.PPR_USE == 'RESERVOIR');
   };
 
-  var myStyle = function(feature) {
+  var myStyle3 = function(feature) {
     switch (feature.properties.PPR_USE) {
       case 'GREENWAY_PARKWAY': return {color: '#5EBD3E'};
       case 'REGIONAL_CONSERVATION_WATERSHED': return {color: '#FFB900'};
@@ -158,7 +161,7 @@ var eachFeatureFunction = function(layer) {
 };
 
 //load
-$(document).ready(function() {
+$(document).ready(function(slide) {
   $.ajax(dataset).done(function(data) {
     var parsedData = JSON.parse(data);
     featureGroup = L.geoJson(parsedData, {
@@ -204,84 +207,3 @@ window.onclick = function(event) {
     }
   }
 };
-
-//Plotting route
-var state = {
-  position: {
-    marker: null,
-    updated: null
-  }
-};
-
-/* We'll use underscore's `once` function to make sure this only happens
- *  one time even if weupdate the position later
- */
-var goToOrigin = _.once(function(lat, lng) {
-  map.flyTo([lat, lng], 14);
-});
-
-
-var geolocate = function(location) {
-  var geolocateString = `https://api.mapbox.com/geocoding/v5/mapbox.places/${location}.json?access_token=pk.eyJ1IjoicnVvbGxlIiwiYSI6ImNrOHVsaWpmODBjOXAzdWpzbDVucHZzMWMifQ.bAvoHwOnkMt0bp4QzSJ-aA&geometries=geojson`
-  console.log("geolocate", geolocateString);
-  var req = $.ajax(geolocateString);
-  return req;
-};
-
-var getDirections = function(origin, destination) {
-  var directionsString = `https://api.mapbox.com/directions/v5/mapbox/cycling/${origin[0]},${origin[1]};${destination[0]},${destination[1]}?access_token=pk.eyJ1IjoicnVvbGxlIiwiYSI6ImNrOHVsaWpmODBjOXAzdWpzbDVucHZzMWMifQ.bAvoHwOnkMt0bp4QzSJ-aA&geometries=geojson`
-  console.log("directionString", directionsString);
-  var req = $.ajax(directionsString);
-  return req;
-};
-
-/* Given a lat and a long, we should create a marker, store it
- *  somewhere, and add it to the map
- */
-var updatePosition = function(lat, lng, updated) {
-  if (state.position.marker) { map.removeLayer(state.position.marker); }
-  state.position.marker = L.circleMarker([lat, lng], {color: "blue"});
-  state.position.updated = updated;
-  state.position.marker.addTo(map);
-  goToOrigin(lat, lng);
-};
-
-var origin;
-var destination;
-
-$(document).ready(function() {
-  /* This 'if' check allows us to safely ask for the user's current position */
-  if ("geolocation" in navigator) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      origin = [position.coords.longitude, position.coords.latitude];
-      updatePosition(position.coords.latitude, position.coords.longitude, position.timestamp);
-    });
-  } else {
-    alert("Unable to access geolocation API!");
-  }
-
-
-  /* Every time a key is lifted while typing in the #dest input, disable
-   * the #calculate button if no text is in the input
-   */
-  $('#dest').keyup(function(e) {
-    if ($('#dest').val().length === 0) {
-      $('#calculate').attr('disabled', true);
-    } else {
-      $('#calculate').attr('disabled', false);
-    }
-  });
-
-  // click handler for the "calculate" button (probably you want to do something with this)
-  $("#calculate").click(function(e) {
-    var dest = $('#dest').val();
-    geolocate(dest).done(function(geolocateResponse) {
-      destination = geolocateResponse.features[0].center;
-      getDirections(origin, destination).done(function(directionsResponse) {
-        geojson = turf.lineString(directionsResponse.routes[0].geometry.coordinates);
-        L.geoJSON(geojson).addTo(map);
-      });
-    });
-  });
-
-});

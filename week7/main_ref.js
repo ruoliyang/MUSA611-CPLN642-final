@@ -92,7 +92,7 @@ var resetApplication = function() {
   state.markers = [];
   state.line = undefined;
   $('#button-reset').hide();
-}
+};
 
 $('#button-reset').click(resetApplication);
 
@@ -103,16 +103,16 @@ Leaflet Draw runs every time a marker is added to the map. When this happens
 ---------------- */
 //${state.markers[0]._latlng.lng},${state.markers[0]._latlng.lat};${state.markers[1]._latlng.lng},${state.markers[1]._latlng.lat}
 
-var coordinates
+var coordinates;
 
 var getDirections = function(origin, destination) {
   var directionsString = `https://api.mapbox.com/optimized-trips/v1/mapbox/walking/${coordinates}?source=first&destination=last&roundtrip=false&access_token=pk.eyJ1IjoiamMwMjAyMDciLCJhIjoiY2s4dWxpeTZ6MGNhcDNuanN0NTcxdzQwciJ9.BrWUModVUsdCDNnBDOkS5g&geometries=geojson`
-  console.log("directionString", directionsString)
-  var req = $.ajax(directionsString)
-  return req
-}
+  console.log("directionString", directionsString);
+  var req = $.ajax(directionsString);
+  return req;
+};
 
-var routes
+var routes;
 
 map.on('draw:created', function (e) {
   var type = e.layerType; // The type of shape
