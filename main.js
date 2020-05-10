@@ -14,8 +14,11 @@ var Stamen_TonerLite = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{
 
 
 var dataset = "https://raw.githubusercontent.com/ruoliyang/MUSA611-CPLN642-midterm/master/PPR_Assets.geojson";
+var dataset2 = "https://raw.githubusercontent.com/MUSA611-CPLN692-spring2020/datasets/master/geojson/philadelphia-garbage-collection-boundaries.geojson";
 var featureGroup;
 //var slides;
+
+var zipcodeStyle 
 
 //front page
 var myFilter = function(feature) {
