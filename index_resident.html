@@ -16,8 +16,11 @@
       <br>
       Please enter your zipcode below and the map will direct you to the parks within your zipcode.</p>
   </div>
-    
+  <div style="position: absolute; left: 20px; width: 23%; bottom: 40%;">
+    <br>
+    Zipcode: <input id="string" type="text">
     <button id="gobutton">Go</button>
+  </div>
   <div id="map" style="position: absolute; top:0; right: 0; height: 100%">
   </div>
 
@@ -37,23 +40,9 @@
 
   <script>
       var slides = [
-        { title: "1. All Park and Public Recreation Assets in Philadelphia",
-        description: "This map with the polygones shows all parks and public recreation assets in Philadelphia.",
-        color: "#DEDEE3",
-        filter: myFilter },
-        { title: "2. Large PPR Assets",
-        description: "This map reveals PPR assets that are larger than 50 acres in Philadelphia, categorized as large PPR assets by myself.",
-        color: "#86B9CE",
-        filter: myFilter2 },
-        { title: "3. Small PPR Assets",
-        description: "This map displays PPR assets that are smaller than 3 acres, therefore categorized as small PPR assets by me.",
-        color: "#7772E2",
-        filter: myFilter3 },
-        { title: "4. PPR Assets for Community Use",
-        description: "This map filters PPR assets that are categorized as Community Park (bright orange), Neighborhood Park (dark orange), Mini Park (bright green), and Recreation Site (dark wine).",
-        color: "#4274FD",
-        filter: myFilter4,
-        style: myStyle},
+        { filter: myFilter4,
+        style: myStyle,
+        },
         { title: "5. Urban PPR Assets",
         description: "Zooming in, this map shows PPR assets located within center city through filtering Zipcodes, which are zipcodes 19102 (dark blue), 19103 (bright pink), 19106 (bright blue), and 19107 (bright green).",
         color: "#FDD149",
@@ -71,8 +60,8 @@
             featureGroup = L.geoJson(parsedData, {
               onEachFeature: function (feature, layer) {
                 layer.myTag = "featureGroup"},
-              style: slide.style,
-              filter: slide.filter,
+              style: myStyle,
+              filter: myFilter4,
             }).addTo(map);
             // quite similar to _.each
             featureGroup.eachLayer(eachFeatureFunction);
@@ -83,4 +72,21 @@
         //$('#sidebar').css("background-color", slide.color)
       }
 
-      loadSlide(slides[3]);
+      loadSlide();
+
+      var go = function() {
+        if (currentSlide == slides.length - 1) {
+        } else {
+          $('#nextButton').show()
+          currentSlide = currentSlide + 1
+          loadSlide(slides[currentSlide])
+        }
+        if (currentSlide == slides.length - 1) {
+          $('#nextButton').hide()
+        }};
+      $('#nextButton').click(function(e) {
+        if (currentSlide !== -1) {
+          $('#backButton').show()
+        } else {};
+        next()
+      });
